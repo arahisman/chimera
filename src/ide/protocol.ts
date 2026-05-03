@@ -159,7 +159,14 @@ export const IdePermissionRequestParamsSchema = z.object({
   inputSummary: z.string().optional(),
   affectedPaths: z.array(z.string()).optional(),
   risk: z.enum(['low', 'medium', 'high']).optional(),
+  suggestedRules: z.array(z.string()).optional(),
   decisionReason: z.string().optional(),
+})
+
+export const IdePermissionResponseParamsSchema = z.object({
+  id: z.string(),
+  decision: z.enum(['allowOnce', 'deny', 'alwaysAllow', 'dontAsk']),
+  reason: z.string().optional(),
 })
 
 export const IdeDiffProposedParamsSchema = z.object({
@@ -177,6 +184,7 @@ export const IdeRequestMethodSchema = z.enum([
   'setModel',
   'setPermissionMode',
   'context.update',
+  'permission.respond',
   'auth.listProviders',
   'auth.login',
   'auth.logout',
@@ -254,6 +262,12 @@ export type IdeSetPermissionModeParams = z.infer<
   typeof IdeSetPermissionModeParamsSchema
 >
 export type IdeStatusEventParams = z.infer<typeof IdeStatusEventParamsSchema>
+export type IdePermissionRequestParams = z.infer<
+  typeof IdePermissionRequestParamsSchema
+>
+export type IdePermissionResponseParams = z.infer<
+  typeof IdePermissionResponseParamsSchema
+>
 export type IdeEventName = z.infer<typeof IdeEventNameSchema>
 export type IdeDiffProposedParams = z.infer<typeof IdeDiffProposedParamsSchema>
 export type ChimeraIdeRequest = z.infer<typeof ChimeraIdeRequestSchema>

@@ -5,6 +5,8 @@ import {
   type IdeEventName,
   type IdeInitializeParams,
   type IdeInitializeResult,
+  type IdePermissionRequestParams,
+  type IdePermissionResponseParams,
   type IdeSendPromptParams,
   type IdeSetModelParams,
   type IdeSetPermissionModeParams,
@@ -44,6 +46,17 @@ export type IdeDiffProposedResult = {
   id: string
 }
 
+export type IdePermissionDecisionResult = {
+  id: string
+  decision: IdePermissionResponseParams['decision']
+  reason?: string
+}
+
+export type IdePermissionResponseResult = {
+  accepted: true
+  decision: IdePermissionResponseParams['decision']
+}
+
 export type IdeRuntimeEventSink = (
   name: IdeEventName,
   params?: unknown,
@@ -62,6 +75,12 @@ export type ChimeraIdeRuntime = {
   ): Promise<IdeSetPermissionModeResult>
   updateContext(input: IdeContextUpdateParams): Promise<IdeContextUpdateResult>
   proposeDiff(input: IdeDiffProposedParams): Promise<IdeDiffProposedResult>
+  requestPermission(
+    input: IdePermissionRequestParams,
+  ): Promise<IdePermissionDecisionResult>
+  respondPermission(
+    input: IdePermissionResponseParams,
+  ): Promise<IdePermissionResponseResult>
   getContext(): NormalizedIdeContext | undefined
 }
 
@@ -87,6 +106,10 @@ export function createDefaultIdeRuntime(
   let currentModel = 'gpt-5.5'
   let permissionMode: IdeSetPermissionModeResult['mode'] = 'default'
   let latestContext: NormalizedIdeContext | undefined
+  const pendingPermissions = new Map<
+    string,
+    (decision: IdePermissionDecisionResult) => void
+  >()
 
   return {
     async initialize(params, context): Promise<IdeInitializeResult> {
@@ -156,6 +179,27 @@ export function createDefaultIdeRuntime(
     async proposeDiff(input): Promise<IdeDiffProposedResult> {
       options.emitEvent?.('diff.proposed', input)
       return { id: input.id }
+    },
+
+    async requestPermission(input): Promise<IdePermissionDecisionResult> {
+      options.emitEvent?.('permission.request', input)
+      return new Promise(resolve => {
+        pendingPermissions.set(input.id, resolve)
+      })
+    },
+
+    async respondPermission(input): Promise<IdePermissionResponseResult> {
+      const pending = pendingPermissions.get(input.id)
+      pendingPermissions.delete(input.id)
+      if (input.decision === 'dontAsk') {
+        permissionMode = 'dontAsk'
+      }
+      pending?.({
+        id: input.id,
+        decision: input.decision,
+        reason: input.reason,
+      })
+      return { accepted: true, decision: input.decision }
     },
 
     getContext(): NormalizedIdeContext | undefined {

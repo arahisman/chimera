@@ -78,6 +78,50 @@ describe('IDE bridge runtime facade', () => {
       },
     ])
   })
+
+  test('requestPermission resolves from an IDE permission response', async () => {
+    const events: Array<{ name: string; params?: unknown }> = []
+    const runtime = createDefaultIdeRuntime({
+      cliVersion: '0.1.0-test',
+      emitEvent: (name, params) => events.push({ name, params }),
+    })
+
+    const decision = runtime.requestPermission({
+      id: 'permission-1',
+      toolUseId: 'tool-1',
+      toolName: 'Bash',
+      displayName: 'Run command',
+      inputSummary: 'npm test',
+      affectedPaths: ['/tmp/project'],
+      risk: 'medium',
+      suggestedRules: ['Bash(npm test)'],
+    })
+    await expect(
+      runtime.respondPermission({
+        id: 'permission-1',
+        decision: 'allowOnce',
+        reason: 'Allowed from VS Code',
+      }),
+    ).resolves.toEqual({ accepted: true, decision: 'allowOnce' })
+    await expect(decision).resolves.toEqual({
+      id: 'permission-1',
+      decision: 'allowOnce',
+      reason: 'Allowed from VS Code',
+    })
+    expect(events[0]).toEqual({
+      name: 'permission.request',
+      params: {
+        id: 'permission-1',
+        toolUseId: 'tool-1',
+        toolName: 'Bash',
+        displayName: 'Run command',
+        inputSummary: 'npm test',
+        affectedPaths: ['/tmp/project'],
+        risk: 'medium',
+        suggestedRules: ['Bash(npm test)'],
+      },
+    })
+  })
 })
 
 function createInitializeParams(): IdeInitializeParams {

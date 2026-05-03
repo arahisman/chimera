@@ -7,6 +7,8 @@ import {
   type IdeDiffProposedParams,
   type IdeInitializeParams,
   type IdeInitializeResult,
+  type IdePermissionRequestParams,
+  type IdePermissionResponseParams,
   type IdeSendPromptParams,
   type IdeSetModelParams,
   type IdeSetPermissionModeParams,
@@ -83,6 +85,34 @@ describe('IDE stdio server', () => {
     expect(response.error.code).toBe(-32700)
     expect(response.error.message).toContain('Parse error')
   })
+
+  test('accepts IDE permission responses', async () => {
+    const { input, output, readOutput } = createHarness()
+    const server = runIdeStdioServer({
+      input,
+      output,
+      runtime: createFakeRuntime(),
+      cliVersion: '0.1.0-test',
+    })
+
+    input.end(
+      `${JSON.stringify(
+        createIdeRequest(3, 'permission.respond', {
+          id: 'permission-1',
+          decision: 'alwaysAllow',
+          reason: 'Trusted workspace command',
+        }),
+      )}\n`,
+    )
+    await server
+
+    const response = JSON.parse(readOutput())
+    expect(response.id).toBe(3)
+    expect(response.result).toEqual({
+      accepted: true,
+      decision: 'alwaysAllow',
+    })
+  })
 })
 
 function createHarness(): {
@@ -137,6 +167,12 @@ function createFakeRuntime(): ChimeraIdeRuntime {
     },
     async proposeDiff(input: IdeDiffProposedParams) {
       return { id: input.id }
+    },
+    async requestPermission(input: IdePermissionRequestParams) {
+      return { id: input.id, decision: 'allowOnce' as const }
+    },
+    async respondPermission(input: IdePermissionResponseParams) {
+      return { accepted: true as const, decision: input.decision }
     },
     getContext() {
       return undefined
