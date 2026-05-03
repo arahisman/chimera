@@ -25,7 +25,7 @@
 - [x] Task 11: Permission prompt roundtrip committed in `/Users/arahisman/development/claude-code` as `1b27791` and `/Users/arahisman/development/chimera-vscode` as `ec946ac`.
 - [x] Task 12: Auth, provider, model, MCP, plugin UI committed in `/Users/arahisman/development/claude-code` as `0c31a23` and `/Users/arahisman/development/chimera-vscode` as `7d8a6b9`.
 - [x] Task 13: Sessions and checkpoints committed in `/Users/arahisman/development/claude-code` as `e96aa6c` and `/Users/arahisman/development/chimera-vscode` as `bf8f04a`.
-- [ ] Task 14: Sidebar timeline and polish.
+- [x] Task 14: Sidebar timeline and polish committed in `/Users/arahisman/development/chimera-vscode` as `279283d`.
 - [ ] Task 15: End-to-end verification.
 
 ## Repository Layout
