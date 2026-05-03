@@ -228,6 +228,7 @@ async function* runCliQuery(params: {
     prompt,
     '--output-format',
     'stream-json',
+    '--verbose',
   ]
   const options = params.options as Record<string, unknown> | undefined
   if (typeof options?.cwd === 'string') args.push('--add-dir', options.cwd)
@@ -235,11 +236,18 @@ async function* runCliQuery(params: {
   if (typeof options?.permissionMode === 'string') {
     args.push('--permission-mode', options.permissionMode)
   }
+  if (typeof options?.sessionId === 'string') {
+    args.push('--resume', options.sessionId)
+  }
   const child = spawn(process.execPath, args, {
     cwd: typeof options?.cwd === 'string' ? options.cwd : process.cwd(),
     env: process.env,
     stdio: ['ignore', 'pipe', 'pipe'],
   })
+  const signal = options?.signal as AbortSignal | undefined
+  const abort = () => child.kill('SIGTERM')
+  if (signal?.aborted) abort()
+  signal?.addEventListener('abort', abort, { once: true })
 
   let stderr = ''
   child.stderr.setEncoding('utf8')
@@ -269,6 +277,10 @@ async function* runCliQuery(params: {
   const code = await new Promise<number | null>(resolve =>
     child.once('close', resolve),
   )
+  signal?.removeEventListener('abort', abort)
+  if (signal?.aborted) {
+    throw new AbortError()
+  }
   if (code !== 0) {
     throw new Error(stderr.trim() || `Chimera SDK query exited with ${code}`)
   }

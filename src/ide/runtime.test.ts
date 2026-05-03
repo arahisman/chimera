@@ -7,7 +7,10 @@ import { IdeRuntimeError, createDefaultIdeRuntime } from './runtime.js'
 
 describe('IDE bridge runtime facade', () => {
   test('initialize returns Chimera model metadata', async () => {
-    const runtime = createDefaultIdeRuntime({ cliVersion: '0.1.0-test' })
+    const runtime = createDefaultIdeRuntime({
+      cliVersion: '0.1.0-test',
+      discoverExternalModels: false,
+    })
     const result = await runtime.initialize(createInitializeParams(), {
       cliVersion: '0.1.0-test',
     })
@@ -33,22 +36,79 @@ describe('IDE bridge runtime facade', () => {
     })
   })
 
-  test('sendPrompt accepts IDE tasks and emits status events', async () => {
+  test('sendPrompt runs IDE tasks through the prompt runner', async () => {
     const events: Array<{ name: string; params?: unknown }> = []
     const runtime = createDefaultIdeRuntime({
       cliVersion: '0.1.0-test',
       emitEvent: (name, params) => events.push({ name, params }),
+      promptRunner: async function* (input) {
+        expect(input.prompt).toBe('Refactor the selected function')
+        expect(input.model).toBe('gpt-5.5')
+        yield {
+          type: 'assistant',
+          uuid: 'assistant-1',
+          session_id: 'session-1',
+          message: {
+            content: [{ type: 'text', text: 'I will refactor it.' }],
+          },
+        }
+        yield {
+          type: 'result',
+          subtype: 'success',
+          uuid: 'result-1',
+          session_id: 'session-1',
+          is_error: false,
+          result: 'Done.',
+        }
+      },
     })
 
     await expect(
       runtime.sendPrompt({ prompt: 'Refactor the selected function' }),
     ).resolves.toEqual({ accepted: true })
-    expect(events.map(event => event.name)).toEqual(['status', 'status'])
+    expect(events.map(event => event.name)).toEqual([
+      'status',
+      'assistant.message',
+      'status',
+    ])
     expect(events[0]?.params).toMatchObject({
       state: 'thinking',
     })
     expect(events[1]?.params).toMatchObject({
+      text: 'I will refactor it.',
+      sessionId: 'session-1',
+    })
+    expect(events[2]?.params).toMatchObject({
       state: 'done',
+      sessionId: 'session-1',
+    })
+  })
+
+  test('interrupt aborts the active IDE task', async () => {
+    const events: Array<{ name: string; params?: unknown }> = []
+    let started!: () => void
+    const startedPromise = new Promise<void>(resolve => {
+      started = resolve
+    })
+    const runtime = createDefaultIdeRuntime({
+      cliVersion: '0.1.0-test',
+      emitEvent: (name, params) => events.push({ name, params }),
+      promptRunner: async function* (input) {
+        started()
+        await new Promise<void>(resolve => {
+          input.signal.addEventListener('abort', () => resolve(), { once: true })
+        })
+        throw new Error('aborted')
+      },
+    })
+
+    const prompt = runtime.sendPrompt({ prompt: 'Run a long task' })
+    await startedPromise
+    await expect(runtime.interrupt()).resolves.toEqual({ interrupted: true })
+    await expect(prompt).resolves.toEqual({ accepted: false })
+    expect(events.at(-1)?.params).toMatchObject({
+      state: 'idle',
+      label: 'Task interrupted.',
     })
   })
 

@@ -202,6 +202,8 @@ Current IDE support includes:
 - native permission prompts with allow once, deny, always allow, and dontAsk;
 - provider login/logout and model selection through the same provider catalog
   used by the CLI;
+- live task execution through the CLI SDK stream with assistant responses shown
+  in the sidebar transcript;
 - MCP status/reload, plugin reload, session browser, checkpoints, rollback
   preview, and a compact Chimera sidebar timeline.
 
