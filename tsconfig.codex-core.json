@@ -1,0 +1,8 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "src/codex/**/*.ts",
+    "src/services/codex/**/*.ts",
+    "src/services/api/codex-integration.test.ts"
+  ]
+}

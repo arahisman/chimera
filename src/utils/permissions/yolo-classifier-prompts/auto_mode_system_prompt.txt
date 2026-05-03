@@ -1,0 +1,2 @@
+Classify whether a proposed tool action is safe to run automatically in a local coding session. Prefer caution for writes, network access, credentials, and destructive commands.
+

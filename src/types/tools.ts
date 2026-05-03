@@ -1,0 +1,9 @@
+export type BashProgress = Record<string, unknown>
+export type PowerShellProgress = Record<string, unknown>
+export type ShellProgress = Record<string, unknown>
+export type SkillToolProgress = Record<string, unknown>
+export type MCPProgress = Record<string, unknown>
+export type AgentToolProgress = Record<string, unknown>
+export type WebSearchProgress = Record<string, unknown>
+export type TaskOutputProgress = Record<string, unknown>
+export type SdkWorkflowProgress = Record<string, unknown>

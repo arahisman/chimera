@@ -1,0 +1,2 @@
+Assess the requested tool action for local execution safety. Return a conservative permission decision when the action may modify files, execute code, or access sensitive data.
+

@@ -1,0 +1,61 @@
+spawn bun /Users/arahisman/development/claude-code/dist/chimera.js --bare --tools 
+╭───Chimerav0.0.0-local─────────────────────────────────────────────────────╮
+││Tipsforgettingstarted│
+│Welcomeback!│Run/inittocreateanAGENTS.mdorCLAU…│
+││─────────────────────────────────────────│
+│▐▛███▜▌│Recentactivity│
+│▝▜█████▛▘│Norecentactivity│
+│▘▘▝▝││
+│││
+│GPT-5.5·APIUsageBilling││
+│/…/T/chimera-tui-work-fv0v1s││
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+────────────────────────────────────────────────────────────────────────────────
+❯  
+────────────────────────────────────────────────────────────────────────────────
+?forshortcuts●high·/effort
+0q❯ /resume                                                                       ·  Loadingconversations…                                                                                                                                                                ✢
+────────────────────────────────────────────────────────────────────────────────
+
+ResumeSession
+╭──────────────────────────────────────────────────────────────────────────────╮
+│⌕Search…│
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+❯interactiveratelimitprompt
+3secondsago·HEAD·1.9KB
+
+interactiveeditdiffprompt
+18secondsago·HEAD·6.9KB
+
+interactivepermissionprompt
+1minuteago·HEAD·4KB
+
+tuiresumeseedmarker
+2minutesago·HEAD·1.9KB
+
+Ctrl+Atoshowallprojects·Ctrl+Vtopreview·Ctrl+Rtorename·Typeto
+search·Esctocancel·
+Btoggl branch · Crl+V to preview·  Ctrl+Rto rename · Type to search · Esc to cancel · 
+╭───Chimerav0.0.0-local─────────────────────────────────────────────────────╮
+││Tipsforgettingstarted│
+│Welcomeback!│Run/inittocreateanAGENTS.mdorCLAU…│
+││─────────────────────────────────────────│
+│▐▛███▜▌│Recentactivity│
+│▝▜█████▛▘│Norecentactivity│
+│▘▘▝▝││
+│││
+│GPT-5.5·APIUsageBilling││
+│/…/T/chimera-tui-work-fv0v1s││
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+❯ /resume 
+ ⎿Resumecancelled
+
+────────────────────────────────────────────────────────────────────────────────
+❯  
+────────────────────────────────────────────────────────────────────────────────
+?forshortcuts●high·/effort
+               
+                                                                                

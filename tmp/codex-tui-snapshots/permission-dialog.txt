@@ -1,0 +1,68 @@
+spawn bun /Users/arahisman/development/claude-code/dist/chimera.js --bare --tools Bash
+╭───Chimerav0.0.0-local─────────────────────────────────────────────────────╮
+││Tipsforgettingstarted│
+│Welcomeback!│Run/inittocreateanAGENTS.mdorCLAU…│
+││─────────────────────────────────────────│
+│▐▛███▜▌│Recentactivity│
+│▝▜█████▛▘│Norecentactivity│
+│▘▘▝▝││
+│││
+│GPT-5.5·APIUsageBilling││
+│/…/T/chimera-tui-work-fv0v1s││
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+────────────────────────────────────────────────────────────────────────────────
+❯  
+────────────────────────────────────────────────────────────────────────────────
+?forshortcuts●high·/effort
+0q❯ interactive permission prompt                                                    · Incubating…                                                                                                  
+────────────────────────────────────────────────────────────────────────────────
+❯  
+────────────────────────────────────────────────────────────────────────────────
+esctointerrupt●high·/effort
+⏺Reading 1 file…(ctrl+o to expand)  ⎿  $ printf permission-ok > '/var/folders/vn/8przk73d24bbt2py3tlb5jsr0000gn/T/     chimera-tui-work-fv0v1s/permission-output.txt' && cat '/var/folders/vn/8prz   k73d24bbt2py3tlb5jsr0000gn/T/chimera-tui-work-fv0v1s/permission-output.txt'                                                                                ────────────────────────────────────────────────────────────────────────────────
+Bashcommand
+
+printfpermission-ok>'/var/folders/vn/8przk73d24bbt2py3tlb5jsr0000gn/T/c
+himera-tui-work-fv0v1s/permission-output.txt'&&cat
+'/var/folders/vn/8przk73d24bbt2py3tlb5jsr0000gn/T/chimera-tui-work-fv0v1s/
+permission-output.txt'
+TUIpermissionsmoke
+
+Doyouwanttoproceed?
+❯1.Yes
+2.Yes,andalwaysallowaccesstochimera-tui-work-fv0v1s/fromthisproject
+
+3.No
+
+Esctocancel·Tabtoamend·ctrl+etoexplain
+· Doing…                                                                                    ────────────────────────────────────────────────────────────────────────────────❯                                                                         ────────────────────────────────────────────────────────────────────────────────esc to interrupt                                            ● high · /effort                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                Doing…                
+Doin
+
+
+
+
+
+╭───Chimerav0.0.0-local─────────────────────────────────────────────────────╮
+││Tipsforgettingstarted│
+│Welcomeback!│Run/inittocreateanAGENTS.mdorCLAU…│
+││─────────────────────────────────────────│
+│▐▛███▜▌│Recentactivity│
+│▝▜█████▛▘│Norecentactivity│
+│▘▘▝▝││
+│││
+│GPT-5.5·APIUsageBilling││
+│/…/T/chimera-tui-work-fv0v1s││
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+❯ interactive permission prompt                                                 
+
+Read1 file(ctrl+otoexpand)
+
+⏺hellofromcodex
+
+────────────────────────────────────────────────────────────────────────────────
+❯  
+────────────────────────────────────────────────────────────────────────────────
+●high·/effort
+                                                                                

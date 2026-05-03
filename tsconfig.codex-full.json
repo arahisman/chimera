@@ -1,0 +1,19 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "src/codex/**/*.ts",
+    "src/services/codex/**/*.ts",
+    "src/services/openai/**/*.ts",
+    "src/services/native/**/*.ts",
+    "src/entrypoints/sdk/controlTypes.ts",
+    "src/entrypoints/sdk/coreTypes.generated.ts",
+    "src/entrypoints/sdk/sdkUtilityTypes.ts",
+    "src/entrypoints/sdk/settingsTypes.generated.ts",
+    "src/entrypoints/sdk/toolTypes.ts",
+    "src/entrypoints/sdk/controlSchemas.ts",
+    "src/utils/secureStorage/types.ts",
+    "src/constants/querySource.ts",
+    "src/global.d.ts"
+  ],
+  "exclude": ["src/**/*.test.ts", "src/**/*.codex.test.ts"]
+}

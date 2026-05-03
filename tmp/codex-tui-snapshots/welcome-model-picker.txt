@@ -1,0 +1,51 @@
+spawn bun /Users/arahisman/development/claude-code/dist/chimera.js --bare
+╭───Chimerav0.0.0-local─────────────────────────────────────────────────────╮
+││Tipsforgettingstarted│
+│Welcomeback!│Run/inittocreateanAGENTS.mdorCLAU…│
+││─────────────────────────────────────────│
+│▐▛███▜▌│Recentactivity│
+│▝▜█████▛▘│Norecentactivity│
+│▘▘▝▝││
+│││
+│GPT-5.5·APIUsageBilling││
+│/…/T/chimera-tui-work-fv0v1s││
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+────────────────────────────────────────────────────────────────────────────────
+❯  
+────────────────────────────────────────────────────────────────────────────────
+?forshortcuts●high·/effort
+0q❯ /model                                                                           ────────────────────────────────────────────────────────────────────────────────Select model                   
+SwitchbetweenOpenAImodels.AppliestothissessionandfutureChimera
+sessions.Forothermodelids,specifywith--model.
+
+❯1.GPT-5.5GPT-5.5·Mostcapableforcomplexcodingandreasoning
+2.GPT-5.4GPT-5.4·Balancedcodingmodel
+3.GPT-5.4MiniGPT-5.4Mini·Fastermodelforeverydayedits
+4.GPT-5.4NanoGPT-5.4Nano·Lowest-latencymodelforsmalltasks
+5.GPT-5.3CodexGPT-5.3Codex·Codex-specializedcodingmodel
+
+● Higheffort(default)←→toadjust
+
+Entertoconfirm·Esctoexit
+╭───Chimerav0.0.0-local─────────────────────────────────────────────────────╮
+││Tipsforgettingstarted│
+│Welcomeback!│Run/inittocreateanAGENTS.mdorCLAU…│
+││─────────────────────────────────────────│
+│▐▛███▜▌│Recentactivity│
+│▝▜█████▛▘│Norecentactivity│
+│▘▘▝▝││
+│││
+│GPT-5.5·APIUsageBilling││
+│/…/T/chimera-tui-work-fv0v1s││
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+❯ /model 
+ ⎿KeptmodelasGPT-5.5(default)
+
+────────────────────────────────────────────────────────────────────────────────
+❯  
+────────────────────────────────────────────────────────────────────────────────
+?forshortcuts●high·/effort
+               
+                                                                                

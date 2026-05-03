@@ -1,0 +1,2 @@
+Create a careful implementation plan for the current Chimera task. Focus on local repository evidence, tests, risks, and concrete next steps.
+

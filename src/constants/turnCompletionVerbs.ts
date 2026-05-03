@@ -1,0 +1,26 @@
+// Past tense verbs for turn completion messages
+// These verbs work naturally with "for [duration]" (e.g., "Worked for 5s")
+export const TURN_COMPLETION_VERBS = [
+  'Cogitated',
+  'Compiled',
+  'Composed',
+  'Crunched',
+  'Debugged',
+  'Distilled',
+  'Forged',
+  'Patched',
+  'Polished',
+  'Refactored',
+  'Resolved',
+  'Routed',
+  'Shipped',
+  'Solved',
+  'Spliced',
+  'Stitched',
+  'Synthesized',
+  'Transmuted',
+  'Tuned',
+  'Untangled',
+  'Wired',
+  'Worked',
+]

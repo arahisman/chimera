@@ -1,0 +1,48 @@
+spawn bun /Users/arahisman/development/claude-code/dist/chimera.js --bare
+╭───Chimerav0.0.0-local─────────────────────────────────────────────────────╮
+││Tipsforgettingstarted│
+│Welcomeback!│Run/inittocreateanAGENTS.mdorCLAU…│
+││─────────────────────────────────────────│
+│▐▛███▜▌│Recentactivity│
+│▝▜█████▛▘│Norecentactivity│
+│▘▘▝▝││
+│││
+│GPT-5.5·APIUsageBilling││
+│/…/T/chimera-tui-work-fv0v1s││
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+────────────────────────────────────────────────────────────────────────────────
+❯  
+────────────────────────────────────────────────────────────────────────────────
+?forshortcuts●high·/effort
+0q❯ /config                                                                          ──────────────────────────────────────────────────────────────────────────────── Status   Config Usage                
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+╭──────────────────────────────────────────────────────────────────────────╮│⌕Search settings…│╰──────────────────────────────────────────────────────────────────────────╯Auto-compacttrueShowtipstrueReducemotionfalseThinkingmodetrueRewindcode(checkpoints)trueVerboseoutputfalseTerminalprogressbartrueShowturndurationtrueDefaultpermissionmodeDefault↓ 11 more belowType to filter · Enter/↓ to select · ↑ to tabs · Esc to clear
+
+
+/legacy-claude-setting No settings match "/legacy-claude-setting"                Type to filter · Enter/↓ to select · ↑ to tabs · Esc to clear                                                                                                                                                                                                                
+
+
+Search settings…         Auto-compact                            trueShowtipstrue  Reduce motion                             false            ThinkingmodetrueRewindcode(checkpoints)trueVerboseoutputfalseTerminalprogressbartrueShowturndurationtrueDefaultpermissionmodeDefault↓ 11 more belowType to filter · Enter/↓ to select · ↑ to tabs · Esc to clear
+
+
+4mu4mu4mu
