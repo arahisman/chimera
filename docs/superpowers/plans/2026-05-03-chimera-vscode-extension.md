@@ -21,7 +21,7 @@
 - [x] Task 7: Extension bridge client committed in `/Users/arahisman/development/chimera-vscode` as `8d86a8c`.
 - [x] Task 8: Extension status bar and commands committed in `/Users/arahisman/development/chimera-vscode` as `c931116`.
 - [x] Task 9: IDE context collector committed in `/Users/arahisman/development/chimera-vscode` as `e4f4034`.
-- [ ] Task 10: Native diff and edit preview.
+- [x] Task 10: Native diff and edit preview committed in `/Users/arahisman/development/claude-code` as `2a02b45` and `/Users/arahisman/development/chimera-vscode` as `fcdd8e1`.
 - [ ] Task 11: Permission prompt roundtrip.
 - [ ] Task 12: Auth, provider, model, MCP, plugin UI.
 - [ ] Task 13: Sessions and checkpoints.
