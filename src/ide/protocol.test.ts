@@ -32,6 +32,19 @@ describe('Chimera IDE protocol', () => {
     expect(parsed.method).toBe('event/status')
   })
 
+  test('parses native diff proposal events', () => {
+    const event = createIdeEvent('diff.proposed', {
+      id: 'diff-1',
+      toolUseId: 'tool-1',
+      filePath: '/tmp/project/src/app.ts',
+      originalText: 'old',
+      proposedText: 'new',
+    })
+
+    const parsed = ChimeraIdeMessageSchema.parse(event)
+    expect(parsed.method).toBe('event/diff.proposed')
+  })
+
   test('parses response envelopes', () => {
     const response = createIdeResponse(1, {
       protocolVersion: 'chimera.ide.v1',

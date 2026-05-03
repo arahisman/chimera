@@ -48,6 +48,36 @@ describe('IDE bridge runtime facade', () => {
       mode: 'dontAsk',
     })
   })
+
+  test('proposeDiff emits native IDE diff events', async () => {
+    const events: Array<{ name: string; params?: unknown }> = []
+    const runtime = createDefaultIdeRuntime({
+      cliVersion: '0.1.0-test',
+      emitEvent: (name, params) => events.push({ name, params }),
+    })
+
+    await expect(
+      runtime.proposeDiff({
+        id: 'diff-1',
+        toolUseId: 'tool-1',
+        filePath: '/tmp/project/src/app.ts',
+        originalText: 'old',
+        proposedText: 'new',
+      }),
+    ).resolves.toEqual({ id: 'diff-1' })
+    expect(events).toEqual([
+      {
+        name: 'diff.proposed',
+        params: {
+          id: 'diff-1',
+          toolUseId: 'tool-1',
+          filePath: '/tmp/project/src/app.ts',
+          originalText: 'old',
+          proposedText: 'new',
+        },
+      },
+    ])
+  })
 })
 
 function createInitializeParams(): IdeInitializeParams {

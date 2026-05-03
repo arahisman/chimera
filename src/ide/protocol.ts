@@ -254,6 +254,8 @@ export type IdeSetPermissionModeParams = z.infer<
   typeof IdeSetPermissionModeParamsSchema
 >
 export type IdeStatusEventParams = z.infer<typeof IdeStatusEventParamsSchema>
+export type IdeEventName = z.infer<typeof IdeEventNameSchema>
+export type IdeDiffProposedParams = z.infer<typeof IdeDiffProposedParamsSchema>
 export type ChimeraIdeRequest = z.infer<typeof ChimeraIdeRequestSchema>
 export type ChimeraIdeNotification = z.infer<
   typeof ChimeraIdeNotificationSchema

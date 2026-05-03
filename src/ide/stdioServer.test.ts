@@ -3,8 +3,13 @@ import { PassThrough, Writable } from 'stream'
 import {
   CHIMERA_IDE_PROTOCOL_VERSION,
   createIdeRequest,
+  type IdeContextUpdateParams,
+  type IdeDiffProposedParams,
   type IdeInitializeParams,
   type IdeInitializeResult,
+  type IdeSendPromptParams,
+  type IdeSetModelParams,
+  type IdeSetPermissionModeParams,
 } from './protocol.js'
 import {
   type ChimeraIdeRuntime,
@@ -114,6 +119,27 @@ function createFakeRuntime(): ChimeraIdeRuntime {
         permissionMode: 'default',
         capabilities: { context: true, diff: true, permissions: true },
       }
+    },
+    async sendPrompt(_input: IdeSendPromptParams) {
+      return { accepted: true }
+    },
+    async interrupt() {
+      return { interrupted: false }
+    },
+    async setModel(input: IdeSetModelParams) {
+      return { model: input.model }
+    },
+    async setPermissionMode(input: IdeSetPermissionModeParams) {
+      return { mode: input.mode }
+    },
+    async updateContext(_input: IdeContextUpdateParams) {
+      return { accepted: true as const }
+    },
+    async proposeDiff(input: IdeDiffProposedParams) {
+      return { id: input.id }
+    },
+    getContext() {
+      return undefined
     },
   }
 }

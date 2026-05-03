@@ -1,6 +1,8 @@
 import {
   CHIMERA_IDE_PROTOCOL_VERSION,
   type IdeContextUpdateParams,
+  type IdeDiffProposedParams,
+  type IdeEventName,
   type IdeInitializeParams,
   type IdeInitializeResult,
   type IdeSendPromptParams,
@@ -38,6 +40,15 @@ export type IdeContextUpdateResult = {
   accepted: true
 }
 
+export type IdeDiffProposedResult = {
+  id: string
+}
+
+export type IdeRuntimeEventSink = (
+  name: IdeEventName,
+  params?: unknown,
+) => void
+
 export type ChimeraIdeRuntime = {
   initialize(
     params: IdeInitializeParams,
@@ -50,11 +61,13 @@ export type ChimeraIdeRuntime = {
     input: IdeSetPermissionModeParams,
   ): Promise<IdeSetPermissionModeResult>
   updateContext(input: IdeContextUpdateParams): Promise<IdeContextUpdateResult>
+  proposeDiff(input: IdeDiffProposedParams): Promise<IdeDiffProposedResult>
   getContext(): NormalizedIdeContext | undefined
 }
 
 export type IdeRuntimeOptions = {
   cliVersion: string
+  emitEvent?: IdeRuntimeEventSink
 }
 
 export class IdeRuntimeError extends Error {
@@ -138,6 +151,11 @@ export function createDefaultIdeRuntime(
     async updateContext(input): Promise<IdeContextUpdateResult> {
       latestContext = normalizeIdeContext(input)
       return { accepted: true }
+    },
+
+    async proposeDiff(input): Promise<IdeDiffProposedResult> {
+      options.emitEvent?.('diff.proposed', input)
+      return { id: input.id }
     },
 
     getContext(): NormalizedIdeContext | undefined {

@@ -7,6 +7,7 @@ import {
   IdeSetModelParamsSchema,
   IdeSetPermissionModeParamsSchema,
   createIdeError,
+  createIdeEvent,
   createIdeResponse,
 } from './protocol.js'
 import { JsonRpcLineDecoder, encodeJsonRpcLine } from './jsonRpc.js'
@@ -24,11 +25,14 @@ export type IdeStdioServerOptions = {
 }
 
 export async function runDefaultIdeStdioServer(): Promise<void> {
+  const output = process.stdout
   await runIdeStdioServer({
     input: process.stdin,
-    output: process.stdout,
+    output,
     runtime: createDefaultIdeRuntime({
       cliVersion: process.env.CHIMERA_VERSION ?? '0.0.0-local',
+      emitEvent: (name, params) =>
+        writeMessage(output, createIdeEvent(name, params)),
     }),
     cliVersion: process.env.CHIMERA_VERSION ?? '0.0.0-local',
   })
