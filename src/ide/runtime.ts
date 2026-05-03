@@ -1,11 +1,16 @@
 import {
   CHIMERA_IDE_PROTOCOL_VERSION,
+  type IdeContextUpdateParams,
   type IdeInitializeParams,
   type IdeInitializeResult,
   type IdeSendPromptParams,
   type IdeSetModelParams,
   type IdeSetPermissionModeParams,
 } from './protocol.js'
+import {
+  normalizeIdeContext,
+  type NormalizedIdeContext,
+} from './context.js'
 import { listCodexModels } from '../services/codex/models/registry.js'
 import { validateModel } from '../utils/model/validateModel.js'
 
@@ -29,6 +34,10 @@ export type IdeSetPermissionModeResult = {
   mode: 'default' | 'acceptEdits' | 'dontAsk'
 }
 
+export type IdeContextUpdateResult = {
+  accepted: true
+}
+
 export type ChimeraIdeRuntime = {
   initialize(
     params: IdeInitializeParams,
@@ -40,6 +49,8 @@ export type ChimeraIdeRuntime = {
   setPermissionMode(
     input: IdeSetPermissionModeParams,
   ): Promise<IdeSetPermissionModeResult>
+  updateContext(input: IdeContextUpdateParams): Promise<IdeContextUpdateResult>
+  getContext(): NormalizedIdeContext | undefined
 }
 
 export type IdeRuntimeOptions = {
@@ -62,6 +73,7 @@ export function createDefaultIdeRuntime(
 ): ChimeraIdeRuntime {
   let currentModel = 'gpt-5.5'
   let permissionMode: IdeSetPermissionModeResult['mode'] = 'default'
+  let latestContext: NormalizedIdeContext | undefined
 
   return {
     async initialize(params, context): Promise<IdeInitializeResult> {
@@ -121,6 +133,15 @@ export function createDefaultIdeRuntime(
     async setPermissionMode(input): Promise<IdeSetPermissionModeResult> {
       permissionMode = input.mode
       return { mode: permissionMode }
+    },
+
+    async updateContext(input): Promise<IdeContextUpdateResult> {
+      latestContext = normalizeIdeContext(input)
+      return { accepted: true }
+    },
+
+    getContext(): NormalizedIdeContext | undefined {
+      return latestContext
     },
   }
 }

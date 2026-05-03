@@ -1,5 +1,6 @@
 import {
   ChimeraIdeMessageSchema,
+  IdeContextUpdateParamsSchema,
   IdeInitializeParamsSchema,
   IdeSendPromptParamsSchema,
   IdeRequestMethodSchema,
@@ -140,6 +141,12 @@ async function dispatchMessage(
       case 'setPermissionMode': {
         const params = IdeSetPermissionModeParamsSchema.parse(message.params)
         const result = await options.runtime.setPermissionMode(params)
+        writeMessage(options.output, createIdeResponse(message.id, result))
+        return
+      }
+      case 'context.update': {
+        const params = IdeContextUpdateParamsSchema.parse(message.params)
+        const result = await options.runtime.updateContext(params)
         writeMessage(options.output, createIdeResponse(message.id, result))
         return
       }
