@@ -1,5 +1,7 @@
 import {
   ChimeraIdeMessageSchema,
+  IdeAuthLoginParamsSchema,
+  IdeAuthLogoutParamsSchema,
   IdeContextUpdateParamsSchema,
   IdeInitializeParamsSchema,
   IdePermissionResponseParamsSchema,
@@ -158,6 +160,43 @@ async function dispatchMessage(
       case 'permission.respond': {
         const params = IdePermissionResponseParamsSchema.parse(message.params)
         const result = await options.runtime.respondPermission(params)
+        writeMessage(options.output, createIdeResponse(message.id, result))
+        return
+      }
+      case 'auth.listProviders': {
+        const result = await options.runtime.listAuthProviders()
+        writeMessage(options.output, createIdeResponse(message.id, result))
+        return
+      }
+      case 'auth.login': {
+        const params = IdeAuthLoginParamsSchema.parse(message.params)
+        const result = await options.runtime.login(params)
+        writeMessage(options.output, createIdeResponse(message.id, result))
+        return
+      }
+      case 'auth.logout': {
+        const params = IdeAuthLogoutParamsSchema.parse(message.params)
+        const result = await options.runtime.logout(params)
+        writeMessage(options.output, createIdeResponse(message.id, result))
+        return
+      }
+      case 'models.list': {
+        const result = await options.runtime.listModels()
+        writeMessage(options.output, createIdeResponse(message.id, result))
+        return
+      }
+      case 'mcp.status': {
+        const result = await options.runtime.mcpStatus()
+        writeMessage(options.output, createIdeResponse(message.id, result))
+        return
+      }
+      case 'mcp.reload': {
+        const result = await options.runtime.mcpReload()
+        writeMessage(options.output, createIdeResponse(message.id, result))
+        return
+      }
+      case 'plugins.reload': {
+        const result = await options.runtime.pluginsReload()
         writeMessage(options.output, createIdeResponse(message.id, result))
         return
       }

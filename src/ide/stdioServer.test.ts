@@ -5,6 +5,8 @@ import {
   createIdeRequest,
   type IdeContextUpdateParams,
   type IdeDiffProposedParams,
+  type IdeAuthLoginParams,
+  type IdeAuthLogoutParams,
   type IdeInitializeParams,
   type IdeInitializeResult,
   type IdePermissionRequestParams,
@@ -113,6 +115,26 @@ describe('IDE stdio server', () => {
       decision: 'alwaysAllow',
     })
   })
+
+  test('lists auth providers through the bridge', async () => {
+    const { input, output, readOutput } = createHarness()
+    const server = runIdeStdioServer({
+      input,
+      output,
+      runtime: createFakeRuntime(),
+      cliVersion: '0.1.0-test',
+    })
+
+    input.end(`${JSON.stringify(createIdeRequest(4, 'auth.listProviders', {}))}\n`)
+    await server
+
+    const response = JSON.parse(readOutput())
+    expect(response.id).toBe(4)
+    expect(response.result.providers[0]).toMatchObject({
+      id: 'codex',
+      kind: 'codex',
+    })
+  })
 })
 
 function createHarness(): {
@@ -173,6 +195,37 @@ function createFakeRuntime(): ChimeraIdeRuntime {
     },
     async respondPermission(input: IdePermissionResponseParams) {
       return { accepted: true as const, decision: input.decision }
+    },
+    async listAuthProviders() {
+      return {
+        providers: [
+          {
+            id: 'codex',
+            name: 'ChatGPT / Codex',
+            kind: 'codex' as const,
+            authMethods: ['oauth', 'subscription'],
+            connected: false,
+          },
+        ],
+      }
+    },
+    async login(input: IdeAuthLoginParams) {
+      return { providerId: input.providerId, connected: true }
+    },
+    async logout(input: IdeAuthLogoutParams) {
+      return { providerId: input.providerId, connected: false }
+    },
+    async listModels() {
+      return { models: [] }
+    },
+    async mcpStatus() {
+      return { enabled: false, servers: [] }
+    },
+    async mcpReload() {
+      return { reloaded: true }
+    },
+    async pluginsReload() {
+      return { reloaded: true }
     },
     getContext() {
       return undefined

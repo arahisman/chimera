@@ -135,6 +135,54 @@ export const IdeSetPermissionModeParamsSchema = z.object({
   mode: z.enum(['default', 'acceptEdits', 'dontAsk']),
 })
 
+export const IdeAuthLoginParamsSchema = z.object({
+  providerId: z.string(),
+  apiKey: z.string().optional(),
+})
+
+export const IdeAuthLogoutParamsSchema = z.object({
+  providerId: z.string(),
+})
+
+export const IdeAuthProviderSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  kind: z.enum(['codex', 'external']),
+  authMethods: z.array(z.string()),
+  connected: z.boolean(),
+  env: z.array(z.string()).optional(),
+})
+
+export const IdeAuthProvidersResultSchema = z.object({
+  providers: z.array(IdeAuthProviderSchema),
+})
+
+export const IdeAuthResultSchema = z.object({
+  providerId: z.string(),
+  connected: z.boolean(),
+  message: z.string().optional(),
+})
+
+export const IdeModelsResultSchema = z.object({
+  models: z.array(IdeModelSchema),
+})
+
+export const IdeMcpStatusResultSchema = z.object({
+  enabled: z.boolean(),
+  servers: z.array(
+    z.object({
+      name: z.string(),
+      scope: z.string().optional(),
+      status: z.string().optional(),
+    }),
+  ),
+})
+
+export const IdeReloadResultSchema = z.object({
+  reloaded: z.boolean(),
+  message: z.string().optional(),
+})
+
 export const IdeStatusEventParamsSchema = z.object({
   state: z.enum([
     'idle',
@@ -188,6 +236,7 @@ export const IdeRequestMethodSchema = z.enum([
   'auth.listProviders',
   'auth.login',
   'auth.logout',
+  'models.list',
   'session.list',
   'session.resume',
   'session.checkpoint',
@@ -261,6 +310,14 @@ export type IdeSetModelParams = z.infer<typeof IdeSetModelParamsSchema>
 export type IdeSetPermissionModeParams = z.infer<
   typeof IdeSetPermissionModeParamsSchema
 >
+export type IdeAuthLoginParams = z.infer<typeof IdeAuthLoginParamsSchema>
+export type IdeAuthLogoutParams = z.infer<typeof IdeAuthLogoutParamsSchema>
+export type IdeAuthProvider = z.infer<typeof IdeAuthProviderSchema>
+export type IdeAuthProvidersResult = z.infer<typeof IdeAuthProvidersResultSchema>
+export type IdeAuthResult = z.infer<typeof IdeAuthResultSchema>
+export type IdeModelsResult = z.infer<typeof IdeModelsResultSchema>
+export type IdeMcpStatusResult = z.infer<typeof IdeMcpStatusResultSchema>
+export type IdeReloadResult = z.infer<typeof IdeReloadResultSchema>
 export type IdeStatusEventParams = z.infer<typeof IdeStatusEventParamsSchema>
 export type IdePermissionRequestParams = z.infer<
   typeof IdePermissionRequestParamsSchema
