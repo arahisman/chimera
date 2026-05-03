@@ -1,0 +1,335 @@
+import { z } from 'zod/v4'
+
+export const CHIMERA_IDE_PROTOCOL_VERSION = 'chimera.ide.v1' as const
+
+export type ChimeraIdeProtocolVersion = typeof CHIMERA_IDE_PROTOCOL_VERSION
+
+export const IdeCapabilitySchema = z.object({
+  context: z.boolean().optional(),
+  diff: z.boolean().optional(),
+  permissions: z.boolean().optional(),
+  auth: z.boolean().optional(),
+  models: z.boolean().optional(),
+  sessions: z.boolean().optional(),
+  mcp: z.boolean().optional(),
+  plugins: z.boolean().optional(),
+})
+
+export const IdeEditorSchema = z.object({
+  kind: z.enum(['vscode', 'cursor', 'windsurf']),
+  name: z.string(),
+  version: z.string().optional(),
+})
+
+export const IdeWorkspaceFolderSchema = z.object({
+  uri: z.string(),
+  name: z.string(),
+})
+
+export const IdeRangeSchema = z.object({
+  start: z.object({
+    line: z.number().int().nonnegative(),
+    character: z.number().int().nonnegative(),
+  }),
+  end: z.object({
+    line: z.number().int().nonnegative(),
+    character: z.number().int().nonnegative(),
+  }),
+})
+
+export const IdeDiagnosticSchema = z.object({
+  uri: z.string(),
+  range: IdeRangeSchema,
+  severity: z.enum(['error', 'warning', 'information', 'hint']),
+  message: z.string(),
+  source: z.string().optional(),
+  code: z.union([z.string(), z.number()]).optional(),
+})
+
+export const IdeSelectionSchema = z.object({
+  uri: z.string(),
+  ranges: z.array(IdeRangeSchema),
+  text: z.string().optional(),
+  textHash: z.string().optional(),
+})
+
+export const IdeGitContextSchema = z.object({
+  rootUri: z.string(),
+  branch: z.string().optional(),
+  changedFiles: z.array(z.string()).default([]),
+  stagedFiles: z.array(z.string()).default([]),
+})
+
+export const IdeTerminalContextSchema = z.object({
+  cwd: z.string().optional(),
+  shell: z.string().optional(),
+})
+
+export const IdeContextUpdateParamsSchema = z.object({
+  workspaceFolders: z.array(IdeWorkspaceFolderSchema).optional(),
+  activeFile: z
+    .object({
+      uri: z.string(),
+      languageId: z.string().optional(),
+      dirty: z.boolean().optional(),
+      selectedRanges: z.array(IdeRangeSchema).optional(),
+    })
+    .optional(),
+  selections: z.array(IdeSelectionSchema).optional(),
+  diagnostics: z.array(IdeDiagnosticSchema).optional(),
+  visibleEditors: z.array(z.string()).optional(),
+  git: IdeGitContextSchema.optional(),
+  terminal: IdeTerminalContextSchema.optional(),
+})
+
+export const IdeInitializeParamsSchema = z.object({
+  protocolVersion: z.literal(CHIMERA_IDE_PROTOCOL_VERSION),
+  minProtocolVersion: z.literal(CHIMERA_IDE_PROTOCOL_VERSION),
+  extensionVersion: z.string(),
+  editor: IdeEditorSchema,
+  workspaceFolders: z.array(IdeWorkspaceFolderSchema),
+  capabilities: IdeCapabilitySchema,
+})
+
+export const IdeAccountSchema = z.object({
+  loggedIn: z.boolean(),
+  email: z.string().optional(),
+  provider: z.string().optional(),
+})
+
+export const IdeModelSchema = z.object({
+  id: z.string(),
+  label: z.string().optional(),
+  provider: z.string().optional(),
+  contextWindow: z.number().int().positive().optional(),
+  outputLimit: z.number().int().positive().optional(),
+  current: z.boolean().optional(),
+  available: z.boolean().optional(),
+})
+
+export const IdeInitializeResultSchema = z.object({
+  protocolVersion: z.literal(CHIMERA_IDE_PROTOCOL_VERSION),
+  cliVersion: z.string(),
+  account: IdeAccountSchema,
+  models: z.array(IdeModelSchema),
+  permissionMode: z.enum(['default', 'acceptEdits', 'dontAsk']),
+  capabilities: IdeCapabilitySchema,
+  session: z
+    .object({
+      id: z.string(),
+      title: z.string().optional(),
+    })
+    .optional(),
+})
+
+export const IdeSendPromptParamsSchema = z.object({
+  prompt: z.string(),
+  context: IdeContextUpdateParamsSchema.optional(),
+})
+
+export const IdeSetModelParamsSchema = z.object({
+  model: z.string(),
+})
+
+export const IdeSetPermissionModeParamsSchema = z.object({
+  mode: z.enum(['default', 'acceptEdits', 'dontAsk']),
+})
+
+export const IdeStatusEventParamsSchema = z.object({
+  state: z.enum([
+    'idle',
+    'thinking',
+    'working',
+    'editing',
+    'installing',
+    'committing',
+    'pushing',
+    'done',
+    'error',
+  ]),
+  label: z.string().optional(),
+  sessionId: z.string().optional(),
+})
+
+export const IdePermissionRequestParamsSchema = z.object({
+  id: z.string(),
+  toolUseId: z.string(),
+  toolName: z.string(),
+  displayName: z.string().optional(),
+  inputSummary: z.string().optional(),
+  affectedPaths: z.array(z.string()).optional(),
+  risk: z.enum(['low', 'medium', 'high']).optional(),
+  decisionReason: z.string().optional(),
+})
+
+export const IdeDiffProposedParamsSchema = z.object({
+  id: z.string(),
+  toolUseId: z.string().optional(),
+  filePath: z.string(),
+  originalText: z.string(),
+  proposedText: z.string(),
+})
+
+export const IdeRequestMethodSchema = z.enum([
+  'initialize',
+  'sendPrompt',
+  'interrupt',
+  'setModel',
+  'setPermissionMode',
+  'context.update',
+  'auth.listProviders',
+  'auth.login',
+  'auth.logout',
+  'session.list',
+  'session.resume',
+  'session.checkpoint',
+  'session.rollback',
+  'mcp.status',
+  'mcp.reload',
+  'plugins.reload',
+])
+
+export const IdeEventNameSchema = z.enum([
+  'status',
+  'assistant.delta',
+  'assistant.message',
+  'tool.started',
+  'tool.updated',
+  'tool.completed',
+  'diff.proposed',
+  'edit.applied',
+  'permission.request',
+  'checkpoint.created',
+  'session.updated',
+  'error',
+])
+
+const JsonRpcVersionSchema = z.literal('2.0')
+
+export const ChimeraIdeRequestSchema = z.object({
+  jsonrpc: JsonRpcVersionSchema,
+  id: z.union([z.string(), z.number()]),
+  method: IdeRequestMethodSchema,
+  params: z.unknown().optional(),
+})
+
+export const ChimeraIdeNotificationSchema = z.object({
+  jsonrpc: JsonRpcVersionSchema,
+  method: z.string().refine(method => method.startsWith('event/'), {
+    message: 'IDE notifications must use event/<name> methods',
+  }),
+  params: z.unknown().optional(),
+})
+
+export const ChimeraIdeResponseSchema = z.object({
+  jsonrpc: JsonRpcVersionSchema,
+  id: z.union([z.string(), z.number()]),
+  result: z.unknown(),
+})
+
+export const ChimeraIdeErrorResponseSchema = z.object({
+  jsonrpc: JsonRpcVersionSchema,
+  id: z.union([z.string(), z.number()]).nullable(),
+  error: z.object({
+    code: z.number().int(),
+    message: z.string(),
+    data: z.unknown().optional(),
+  }),
+})
+
+export const ChimeraIdeMessageSchema = z.union([
+  ChimeraIdeRequestSchema,
+  ChimeraIdeNotificationSchema,
+  ChimeraIdeResponseSchema,
+  ChimeraIdeErrorResponseSchema,
+])
+
+export type IdeCapability = z.infer<typeof IdeCapabilitySchema>
+export type IdeInitializeParams = z.infer<typeof IdeInitializeParamsSchema>
+export type IdeInitializeResult = z.infer<typeof IdeInitializeResultSchema>
+export type IdeContextUpdateParams = z.infer<typeof IdeContextUpdateParamsSchema>
+export type IdeSendPromptParams = z.infer<typeof IdeSendPromptParamsSchema>
+export type IdeSetModelParams = z.infer<typeof IdeSetModelParamsSchema>
+export type IdeSetPermissionModeParams = z.infer<
+  typeof IdeSetPermissionModeParamsSchema
+>
+export type IdeStatusEventParams = z.infer<typeof IdeStatusEventParamsSchema>
+export type ChimeraIdeRequest = z.infer<typeof ChimeraIdeRequestSchema>
+export type ChimeraIdeNotification = z.infer<
+  typeof ChimeraIdeNotificationSchema
+>
+export type ChimeraIdeResponse = z.infer<typeof ChimeraIdeResponseSchema>
+export type ChimeraIdeErrorResponse = z.infer<
+  typeof ChimeraIdeErrorResponseSchema
+>
+export type ChimeraIdeMessage = z.infer<typeof ChimeraIdeMessageSchema>
+
+export function createIdeRequest(
+  id: string | number,
+  method: z.infer<typeof IdeRequestMethodSchema>,
+  params?: unknown,
+): ChimeraIdeRequest {
+  return {
+    jsonrpc: '2.0',
+    id,
+    method,
+    ...(params === undefined ? {} : { params }),
+  }
+}
+
+export function createIdeResponse(
+  id: string | number,
+  result: unknown,
+): ChimeraIdeResponse {
+  return {
+    jsonrpc: '2.0',
+    id,
+    result,
+  }
+}
+
+export function createIdeError(
+  id: string | number | null,
+  code: number,
+  message: string,
+  data?: unknown,
+): ChimeraIdeErrorResponse {
+  return {
+    jsonrpc: '2.0',
+    id,
+    error: {
+      code,
+      message,
+      ...(data === undefined ? {} : { data }),
+    },
+  }
+}
+
+export function createIdeEvent(
+  name: z.infer<typeof IdeEventNameSchema>,
+  params?: unknown,
+): ChimeraIdeNotification {
+  return {
+    jsonrpc: '2.0',
+    method: `event/${name}`,
+    ...(params === undefined ? {} : { params }),
+  }
+}
+
+export function isIdeRequest(
+  message: ChimeraIdeMessage,
+): message is ChimeraIdeRequest {
+  return 'method' in message && 'id' in message
+}
+
+export function isIdeResponse(
+  message: ChimeraIdeMessage,
+): message is ChimeraIdeResponse {
+  return 'result' in message && 'id' in message
+}
+
+export function isIdeNotification(
+  message: ChimeraIdeMessage,
+): message is ChimeraIdeNotification {
+  return 'method' in message && !('id' in message)
+}
