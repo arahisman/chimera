@@ -10,6 +10,24 @@
 
 ---
 
+## Progress Ledger
+
+- [x] Task 1: CLI IDE protocol types committed in `eff5b43`.
+- [x] Task 2: JSON-RPC stdio framing committed in `a0578da`.
+- [x] Task 3: Minimal `chimera ide --stdio` server committed in `ba62f55`.
+- [x] Task 4: Bridge runtime facade committed in `b730316`.
+- [x] Task 5: IDE context normalization committed in `b76b191`.
+- [x] Task 6: Separate VS Code extension repository scaffold committed in `/Users/arahisman/development/chimera-vscode` as `a12a0fd`.
+- [x] Task 7: Extension bridge client committed in `/Users/arahisman/development/chimera-vscode` as `8d86a8c`.
+- [ ] Task 8: Extension status bar and commands.
+- [ ] Task 9: IDE context collector.
+- [ ] Task 10: Native diff and edit preview.
+- [ ] Task 11: Permission prompt roundtrip.
+- [ ] Task 12: Auth, provider, model, MCP, plugin UI.
+- [ ] Task 13: Sessions and checkpoints.
+- [ ] Task 14: Sidebar timeline and polish.
+- [ ] Task 15: End-to-end verification.
+
 ## Repository Layout
 
 Main CLI repo: `/Users/arahisman/development/claude-code`
