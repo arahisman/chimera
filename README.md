@@ -179,6 +179,41 @@ Chimera exposes a local tool surface designed for real engineering work:
 
 Use `/help` inside the TUI or `chimera --help` for the full command surface.
 
+## IDE Bridge And VS Code
+
+Chimera exposes a structured IDE bridge for editor integrations:
+
+```bash
+chimera ide --stdio
+```
+
+The bridge uses newline-delimited JSON-RPC rather than terminal scraping. The
+separate VS Code/Cursor/Windsurf extension repository lives at:
+
+```text
+/Users/arahisman/development/chimera-vscode
+```
+
+Current IDE support includes:
+
+- native editor context sync: workspace folders, active file, selections,
+  diagnostics, visible editors, Git branch, and terminal cwd;
+- native VS Code diff preview and accept/reject apply flow;
+- native permission prompts with allow once, deny, always allow, and dontAsk;
+- provider login/logout and model selection through the same provider catalog
+  used by the CLI;
+- MCP status/reload, plugin reload, session browser, checkpoints, rollback
+  preview, and a compact Chimera sidebar timeline.
+
+Build the extension from its repository:
+
+```bash
+npm install
+npm run check
+npm run build
+npm run package:vsix
+```
+
 ## MCP, Plugins, and Skills
 
 Chimera can load local MCP servers and plugin bundles. Project-local plugin metadata uses `.chimera-plugin/`.

@@ -65,3 +65,26 @@ chimera auth status --json
 
 The auth status check uses an isolated config home and must report logged-out
 state without email or account identifiers.
+
+## VS Code Extension Package
+
+The editor extension is packaged from the separate repository:
+
+```text
+/Users/arahisman/development/chimera-vscode
+```
+
+Verification:
+
+```bash
+npm run check
+npm run build
+npm test
+npm run package:vsix
+```
+
+The VSIX is intentionally separate from the npm CLI package. It discovers the
+CLI through the `chimera.cliPath` setting and talks to `chimera ide --stdio`
+over JSON-RPC. The extension package includes only compiled `dist/**`, `media/**`,
+README, license, and package metadata; source and tests are excluded by
+`.vscodeignore`.
