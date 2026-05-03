@@ -16,7 +16,7 @@ describe('codex cli product wiring', () => {
     const cliSource = read('src/entrypoints/cli.tsx')
 
     expect(packageJson.bin).toEqual({
-      'chimera': './dist/chimera.js',
+      'chimera': 'bin/chimera',
     })
     expect(packageJson.scripts.start).toContain('dist/chimera.js')
     expect(buildSource).toContain('src/entrypoints/cli.tsx')
@@ -30,7 +30,7 @@ describe('codex cli product wiring', () => {
     const mainSource = read('src/main.tsx')
 
     expect(mainSource).toContain("program.name('chimera')")
-    expect(mainSource).toContain('Sign in to your ChatGPT account')
+    expect(mainSource).toContain('Sign in to Codex OAuth')
     expect(mainSource).toContain('--device')
     expect(mainSource).toContain("program.command('model [model]')")
     expect(mainSource).toContain("program.command('resume [query]')")

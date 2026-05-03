@@ -43,6 +43,14 @@ async function main(): Promise<void> {
     return;
   }
 
+  if (args[0] === 'ide' && args.includes('--stdio')) {
+    const {
+      runDefaultIdeStdioServer
+    } = await import('../ide/stdioServer.js');
+    await runDefaultIdeStdioServer();
+    return;
+  }
+
   // For all other paths, load the startup profiler
   const {
     profileCheckpoint
