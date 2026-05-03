@@ -33,6 +33,25 @@ describe('IDE bridge runtime facade', () => {
     })
   })
 
+  test('sendPrompt accepts IDE tasks and emits status events', async () => {
+    const events: Array<{ name: string; params?: unknown }> = []
+    const runtime = createDefaultIdeRuntime({
+      cliVersion: '0.1.0-test',
+      emitEvent: (name, params) => events.push({ name, params }),
+    })
+
+    await expect(
+      runtime.sendPrompt({ prompt: 'Refactor the selected function' }),
+    ).resolves.toEqual({ accepted: true })
+    expect(events.map(event => event.name)).toEqual(['status', 'status'])
+    expect(events[0]?.params).toMatchObject({
+      state: 'thinking',
+    })
+    expect(events[1]?.params).toMatchObject({
+      state: 'done',
+    })
+  })
+
   test('setModel rejects unsupported model ids', async () => {
     const runtime = createDefaultIdeRuntime({ cliVersion: '0.1.0-test' })
 

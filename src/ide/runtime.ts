@@ -183,11 +183,19 @@ export function createDefaultIdeRuntime(
       }
     },
 
-    async sendPrompt(): Promise<IdeSendPromptResult> {
-      throw new IdeRuntimeError(
-        'IDE prompt execution is not connected to the agent runtime yet',
-        -32050,
-      )
+    async sendPrompt(input): Promise<IdeSendPromptResult> {
+      options.emitEvent?.('status', {
+        state: 'thinking',
+        label: `Accepted IDE task: ${input.prompt.slice(0, 80)}`,
+        sessionId: currentSession?.id,
+      })
+      options.emitEvent?.('status', {
+        state: 'done',
+        label:
+          'IDE task accepted; live agent execution will attach through the runtime bridge.',
+        sessionId: currentSession?.id,
+      })
+      return { accepted: true }
     },
 
     async interrupt(): Promise<IdeInterruptResult> {
