@@ -12,6 +12,7 @@ controlled alpha distribution. The installed CLI binary is `chimera`.
 - No source maps by default. Set `CHIMERA_BUILD_SOURCEMAP=1` only for local
   debugging builds.
 - Local compatibility packages under `local-packages/**`.
+- MIT license text.
 - Public npm dependencies declared as `devDependencies` for build and smoke
   work. Runtime `dependencies` are limited to tiny local stub packages that
   satisfy intentionally disabled feature gates in the bundled CLI.

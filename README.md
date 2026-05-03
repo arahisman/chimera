@@ -298,3 +298,7 @@ Yes. Use `AGENTS.md` for new projects. Existing `CLAUDE.md` files are still read
 ### Is Chimera affiliated with OpenAI or OpenCode?
 
 No. Chimera is an independent local CLI project. It integrates with OpenAI/Codex APIs and uses OpenCode-compatible provider ideas, but it is not an official OpenAI or OpenCode product.
+
+## License
+
+MIT. See [LICENSE](LICENSE).

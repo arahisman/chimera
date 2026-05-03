@@ -3,7 +3,7 @@
   "version": "0.1.0-alpha.0",
   "description": "Terminal-first coding agent with ChatGPT/Codex OAuth and provider-native model support",
   "type": "module",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "author": "arahisman",
   "homepage": "https://github.com/arahisman/chimera#readme",
   "repository": {
@@ -42,6 +42,7 @@
     "!dist/**/*.map",
     "local-packages/**",
     "README.md",
+    "LICENSE",
     "docs/packaging.md"
   ],
   "scripts": {
