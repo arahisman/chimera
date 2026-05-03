@@ -33,7 +33,7 @@ bun run build
 When publishing is enabled, the package exposes the `chimera` binary:
 
 ```bash
-npm install -g chimera
+npm install -g chimera-code
 chimera
 ```
 

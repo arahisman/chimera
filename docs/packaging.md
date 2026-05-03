@@ -2,12 +2,13 @@
 
 Status date: 2026-05-03
 
-This repository builds a local Chimera CLI package for dogfooding and controlled
-alpha distribution.
+This repository builds the `chimera-code` npm package for dogfooding and
+controlled alpha distribution. The installed CLI binary is `chimera`.
 
 ## Ships
 
 - Our TypeScript source compiled into `dist/chimera.js`.
+- A small `bin/chimera` npm wrapper that launches the compiled CLI with Bun.
 - No source maps by default. Set `CHIMERA_BUILD_SOURCEMAP=1` only for local
   debugging builds.
 - Local compatibility packages under `local-packages/**`.

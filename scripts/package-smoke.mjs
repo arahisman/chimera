@@ -17,10 +17,14 @@ try {
     cwd: root,
   })
 
+  const escapedPackageName = packageJson.name.replace('/', '-').replace(/^@/, '')
   const tarball = (await readdir(tempDir)).find(name =>
-    /^chimera-.*\.tgz$/.test(name),
+    name.startsWith(`${escapedPackageName}-`) && name.endsWith('.tgz'),
   )
-  assert(tarball, 'npm pack did not create chimera-*.tgz')
+  assert(
+    tarball,
+    `npm pack did not create ${escapedPackageName}-*.tgz`,
+  )
   const tarballPath = join(tempDir, tarball)
 
   await run({

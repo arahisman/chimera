@@ -1,21 +1,43 @@
 {
-  "name": "chimera",
-  "version": "0.0.0-local",
-  "description": "Local agentic coding harness for ChatGPT/Codex OAuth",
+  "name": "chimera-code",
+  "version": "0.1.0-alpha.0",
+  "description": "Terminal-first coding agent with ChatGPT/Codex OAuth and provider-native model support",
   "type": "module",
   "license": "UNLICENSED",
+  "author": "arahisman",
+  "homepage": "https://github.com/arahisman/chimera#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arahisman/chimera.git"
+  },
+  "bugs": {
+    "url": "https://github.com/arahisman/chimera/issues"
+  },
   "keywords": [
     "chimera",
     "codex",
     "chatgpt",
     "openai",
+    "openrouter",
+    "xai",
+    "mcp",
+    "tui",
+    "coding-agent",
     "agentic-coding",
     "cli"
   ],
+  "packageManager": "bun@1.2.18",
+  "engines": {
+    "bun": ">=1.2.18"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "bin": {
-    "chimera": "./dist/chimera.js"
+    "chimera": "bin/chimera"
   },
   "files": [
+    "bin/**",
     "dist/**",
     "!dist/**/*.map",
     "local-packages/**",
@@ -28,6 +50,9 @@
     "check:core": "tsc -p tsconfig.codex-core.json --noEmit",
     "check:full": "tsc -p tsconfig.codex-full.json --noEmit",
     "build": "bun scripts/build.mjs",
+    "prepack": "bun run build",
+    "prepublishOnly": "bun run check:full && bun run test:codex && bun run build",
+    "publish:dry-run": "bun run check:full && bun run test:codex && bun run smoke:codex-package && npm publish --dry-run",
     "smoke:codex": "bun run build && bun scripts/smoke-chimera.mjs",
     "smoke:codex-login": "bun run build && bun scripts/smoke-codex-login.mjs",
     "smoke:codex-turn": "bun run build && bun scripts/smoke-codex-turn.mjs",
