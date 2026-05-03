@@ -7,11 +7,14 @@ import {
   type IdeDiffProposedParams,
   type IdeAuthLoginParams,
   type IdeAuthLogoutParams,
+  type IdeCheckpointParams,
   type IdeInitializeParams,
   type IdeInitializeResult,
   type IdePermissionRequestParams,
   type IdePermissionResponseParams,
+  type IdeRollbackParams,
   type IdeSendPromptParams,
+  type IdeSessionResumeParams,
   type IdeSetModelParams,
   type IdeSetPermissionModeParams,
 } from './protocol.js'
@@ -226,6 +229,18 @@ function createFakeRuntime(): ChimeraIdeRuntime {
     },
     async pluginsReload() {
       return { reloaded: true }
+    },
+    async listSessions() {
+      return { sessions: [] }
+    },
+    async resumeSession(input: IdeSessionResumeParams) {
+      return { session: { id: input.sessionId } }
+    },
+    async createCheckpoint(_input: IdeCheckpointParams) {
+      return { id: 'checkpoint-1', createdAt: 1, impactedFiles: [] }
+    },
+    async rollback(_input: IdeRollbackParams) {
+      return { rolledBack: false, impactedFiles: [] }
     },
     getContext() {
       return undefined

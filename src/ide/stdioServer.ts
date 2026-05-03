@@ -2,10 +2,13 @@ import {
   ChimeraIdeMessageSchema,
   IdeAuthLoginParamsSchema,
   IdeAuthLogoutParamsSchema,
+  IdeCheckpointParamsSchema,
   IdeContextUpdateParamsSchema,
   IdeInitializeParamsSchema,
   IdePermissionResponseParamsSchema,
+  IdeRollbackParamsSchema,
   IdeSendPromptParamsSchema,
+  IdeSessionResumeParamsSchema,
   IdeRequestMethodSchema,
   IdeSetModelParamsSchema,
   IdeSetPermissionModeParamsSchema,
@@ -197,6 +200,29 @@ async function dispatchMessage(
       }
       case 'plugins.reload': {
         const result = await options.runtime.pluginsReload()
+        writeMessage(options.output, createIdeResponse(message.id, result))
+        return
+      }
+      case 'session.list': {
+        const result = await options.runtime.listSessions()
+        writeMessage(options.output, createIdeResponse(message.id, result))
+        return
+      }
+      case 'session.resume': {
+        const params = IdeSessionResumeParamsSchema.parse(message.params)
+        const result = await options.runtime.resumeSession(params)
+        writeMessage(options.output, createIdeResponse(message.id, result))
+        return
+      }
+      case 'session.checkpoint': {
+        const params = IdeCheckpointParamsSchema.parse(message.params)
+        const result = await options.runtime.createCheckpoint(params)
+        writeMessage(options.output, createIdeResponse(message.id, result))
+        return
+      }
+      case 'session.rollback': {
+        const params = IdeRollbackParamsSchema.parse(message.params)
+        const result = await options.runtime.rollback(params)
         writeMessage(options.output, createIdeResponse(message.id, result))
         return
       }

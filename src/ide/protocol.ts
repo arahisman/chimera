@@ -183,6 +183,49 @@ export const IdeReloadResultSchema = z.object({
   message: z.string().optional(),
 })
 
+export const IdeSessionSchema = z.object({
+  id: z.string(),
+  title: z.string().optional(),
+  summary: z.string().optional(),
+  cwd: z.string().optional(),
+  gitBranch: z.string().optional(),
+  lastModified: z.number().optional(),
+})
+
+export const IdeSessionListResultSchema = z.object({
+  sessions: z.array(IdeSessionSchema),
+})
+
+export const IdeSessionResumeParamsSchema = z.object({
+  sessionId: z.string(),
+})
+
+export const IdeSessionResumeResultSchema = z.object({
+  session: IdeSessionSchema,
+  message: z.string().optional(),
+})
+
+export const IdeCheckpointParamsSchema = z.object({
+  label: z.string().optional(),
+})
+
+export const IdeCheckpointResultSchema = z.object({
+  id: z.string(),
+  label: z.string().optional(),
+  createdAt: z.number(),
+  impactedFiles: z.array(z.string()).default([]),
+})
+
+export const IdeRollbackParamsSchema = z.object({
+  checkpointId: z.string(),
+})
+
+export const IdeRollbackResultSchema = z.object({
+  rolledBack: z.boolean(),
+  impactedFiles: z.array(z.string()).default([]),
+  message: z.string().optional(),
+})
+
 export const IdeStatusEventParamsSchema = z.object({
   state: z.enum([
     'idle',
@@ -318,6 +361,14 @@ export type IdeAuthResult = z.infer<typeof IdeAuthResultSchema>
 export type IdeModelsResult = z.infer<typeof IdeModelsResultSchema>
 export type IdeMcpStatusResult = z.infer<typeof IdeMcpStatusResultSchema>
 export type IdeReloadResult = z.infer<typeof IdeReloadResultSchema>
+export type IdeSession = z.infer<typeof IdeSessionSchema>
+export type IdeSessionListResult = z.infer<typeof IdeSessionListResultSchema>
+export type IdeSessionResumeParams = z.infer<typeof IdeSessionResumeParamsSchema>
+export type IdeSessionResumeResult = z.infer<typeof IdeSessionResumeResultSchema>
+export type IdeCheckpointParams = z.infer<typeof IdeCheckpointParamsSchema>
+export type IdeCheckpointResult = z.infer<typeof IdeCheckpointResultSchema>
+export type IdeRollbackParams = z.infer<typeof IdeRollbackParamsSchema>
+export type IdeRollbackResult = z.infer<typeof IdeRollbackResultSchema>
 export type IdeStatusEventParams = z.infer<typeof IdeStatusEventParamsSchema>
 export type IdePermissionRequestParams = z.infer<
   typeof IdePermissionRequestParamsSchema

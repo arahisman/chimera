@@ -4,6 +4,8 @@ import {
   type IdeAuthLogoutParams,
   type IdeAuthProvidersResult,
   type IdeAuthResult,
+  type IdeCheckpointParams,
+  type IdeCheckpointResult,
   type IdeContextUpdateParams,
   type IdeDiffProposedParams,
   type IdeEventName,
@@ -13,10 +15,15 @@ import {
   type IdeModelsResult,
   type IdePermissionRequestParams,
   type IdePermissionResponseParams,
+  type IdeReloadResult,
+  type IdeRollbackParams,
+  type IdeRollbackResult,
   type IdeSendPromptParams,
+  type IdeSessionListResult,
+  type IdeSessionResumeParams,
+  type IdeSessionResumeResult,
   type IdeSetModelParams,
   type IdeSetPermissionModeParams,
-  type IdeReloadResult,
 } from './protocol.js'
 import {
   normalizeIdeContext,
@@ -44,6 +51,7 @@ import {
   updateSettingsForSource,
 } from '../utils/settings/settings.js'
 import { validateModel } from '../utils/model/validateModel.js'
+import { listSessionsImpl } from '../utils/listSessionsImpl.js'
 
 export type ChimeraIdeRuntimeContext = {
   cliVersion: string
@@ -115,6 +123,10 @@ export type ChimeraIdeRuntime = {
   mcpStatus(): Promise<IdeMcpStatusResult>
   mcpReload(): Promise<IdeReloadResult>
   pluginsReload(): Promise<IdeReloadResult>
+  listSessions(): Promise<IdeSessionListResult>
+  resumeSession(input: IdeSessionResumeParams): Promise<IdeSessionResumeResult>
+  createCheckpoint(input: IdeCheckpointParams): Promise<IdeCheckpointResult>
+  rollback(input: IdeRollbackParams): Promise<IdeRollbackResult>
   getContext(): NormalizedIdeContext | undefined
 }
 
@@ -140,6 +152,8 @@ export function createDefaultIdeRuntime(
   let currentModel = 'gpt-5.5'
   let permissionMode: IdeSetPermissionModeResult['mode'] = 'default'
   let latestContext: NormalizedIdeContext | undefined
+  let currentSession: IdeSessionResumeResult['session'] | undefined
+  const checkpoints = new Map<string, IdeCheckpointResult>()
   const pendingPermissions = new Map<
     string,
     (decision: IdePermissionDecisionResult) => void
@@ -161,10 +175,11 @@ export function createDefaultIdeRuntime(
           permissions: Boolean(params.capabilities.permissions),
           auth: true,
           models: true,
-          sessions: false,
+          sessions: true,
           mcp: false,
           plugins: false,
         },
+        session: currentSession,
       }
     },
 
@@ -318,6 +333,64 @@ export function createDefaultIdeRuntime(
       return {
         reloaded: true,
         message: 'Plugin configuration will be picked up by the next Chimera session.',
+      }
+    },
+
+    async listSessions(): Promise<IdeSessionListResult> {
+      const dir = latestContext?.workspaceRoots[0]
+      const sessions = await listSessionsImpl({ dir, limit: 50 })
+      return {
+        sessions: sessions.map(session => ({
+          id: session.sessionId,
+          title: session.customTitle,
+          summary: session.summary,
+          cwd: session.cwd,
+          gitBranch: session.gitBranch,
+          lastModified: session.lastModified,
+        })),
+      }
+    },
+
+    async resumeSession(input): Promise<IdeSessionResumeResult> {
+      const sessions = await this.listSessions()
+      const session =
+        sessions.sessions.find(candidate => candidate.id === input.sessionId) ??
+        {
+          id: input.sessionId,
+          title: input.sessionId,
+        }
+      currentSession = session
+      return {
+        session,
+        message: `Selected session ${session.title ?? session.id}.`,
+      }
+    },
+
+    async createCheckpoint(input): Promise<IdeCheckpointResult> {
+      const checkpoint = {
+        id: `ide-${Date.now().toString(36)}`,
+        label: input.label,
+        createdAt: Date.now(),
+        impactedFiles: latestContext?.visibleFiles ?? [],
+      }
+      checkpoints.set(checkpoint.id, checkpoint)
+      options.emitEvent?.('checkpoint.created', checkpoint)
+      return checkpoint
+    },
+
+    async rollback(input): Promise<IdeRollbackResult> {
+      const checkpoint = checkpoints.get(input.checkpointId)
+      if (!checkpoint) {
+        throw new IdeRuntimeError(
+          `Unknown checkpoint: ${input.checkpointId}`,
+          -32030,
+        )
+      }
+      return {
+        rolledBack: false,
+        impactedFiles: checkpoint.impactedFiles,
+        message:
+          'Rollback preview is ready; file restore will be handled by the connected agent runtime.',
       }
     },
 
