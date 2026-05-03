@@ -22,7 +22,7 @@
 - [x] Task 8: Extension status bar and commands committed in `/Users/arahisman/development/chimera-vscode` as `c931116`.
 - [x] Task 9: IDE context collector committed in `/Users/arahisman/development/chimera-vscode` as `e4f4034`.
 - [x] Task 10: Native diff and edit preview committed in `/Users/arahisman/development/claude-code` as `2a02b45` and `/Users/arahisman/development/chimera-vscode` as `fcdd8e1`.
-- [ ] Task 11: Permission prompt roundtrip.
+- [x] Task 11: Permission prompt roundtrip committed in `/Users/arahisman/development/claude-code` as `1b27791` and `/Users/arahisman/development/chimera-vscode` as `ec946ac`.
 - [ ] Task 12: Auth, provider, model, MCP, plugin UI.
 - [ ] Task 13: Sessions and checkpoints.
 - [ ] Task 14: Sidebar timeline and polish.
