@@ -1,25 +1,19 @@
 import {
-  CHIMERA_IDE_PROTOCOL_VERSION,
   ChimeraIdeMessageSchema,
   IdeInitializeParamsSchema,
+  IdeSendPromptParamsSchema,
   IdeRequestMethodSchema,
+  IdeSetModelParamsSchema,
+  IdeSetPermissionModeParamsSchema,
   createIdeError,
   createIdeResponse,
-  type IdeInitializeParams,
-  type IdeInitializeResult,
 } from './protocol.js'
 import { JsonRpcLineDecoder, encodeJsonRpcLine } from './jsonRpc.js'
-
-export type ChimeraIdeRuntimeContext = {
-  cliVersion: string
-}
-
-export type ChimeraIdeRuntime = {
-  initialize(
-    params: IdeInitializeParams,
-    context: ChimeraIdeRuntimeContext,
-  ): Promise<IdeInitializeResult>
-}
+import {
+  IdeRuntimeError,
+  createDefaultIdeRuntime,
+  type ChimeraIdeRuntime,
+} from './runtime.js'
 
 export type IdeStdioServerOptions = {
   input: NodeJS.ReadableStream
@@ -32,7 +26,9 @@ export async function runDefaultIdeStdioServer(): Promise<void> {
   await runIdeStdioServer({
     input: process.stdin,
     output: process.stdout,
-    runtime: createMinimalIdeRuntime(),
+    runtime: createDefaultIdeRuntime({
+      cliVersion: process.env.CHIMERA_VERSION ?? '0.0.0-local',
+    }),
     cliVersion: process.env.CHIMERA_VERSION ?? '0.0.0-local',
   })
 }
@@ -124,6 +120,29 @@ async function dispatchMessage(
         writeMessage(options.output, createIdeResponse(message.id, result))
         return
       }
+      case 'sendPrompt': {
+        const params = IdeSendPromptParamsSchema.parse(message.params)
+        const result = await options.runtime.sendPrompt(params)
+        writeMessage(options.output, createIdeResponse(message.id, result))
+        return
+      }
+      case 'interrupt': {
+        const result = await options.runtime.interrupt()
+        writeMessage(options.output, createIdeResponse(message.id, result))
+        return
+      }
+      case 'setModel': {
+        const params = IdeSetModelParamsSchema.parse(message.params)
+        const result = await options.runtime.setModel(params)
+        writeMessage(options.output, createIdeResponse(message.id, result))
+        return
+      }
+      case 'setPermissionMode': {
+        const params = IdeSetPermissionModeParamsSchema.parse(message.params)
+        const result = await options.runtime.setPermissionMode(params)
+        writeMessage(options.output, createIdeResponse(message.id, result))
+        return
+      }
       default:
         writeMessage(
           options.output,
@@ -133,30 +152,10 @@ async function dispatchMessage(
   } catch (error) {
     writeMessage(
       options.output,
-      createIdeError(message.id, -32603, 'Internal error', errorMessage(error)),
+      error instanceof IdeRuntimeError
+        ? createIdeError(message.id, error.code, error.message, error.data)
+        : createIdeError(message.id, -32603, 'Internal error', errorMessage(error)),
     )
-  }
-}
-
-function createMinimalIdeRuntime(): ChimeraIdeRuntime {
-  return {
-    async initialize(
-      params,
-      context,
-    ): Promise<IdeInitializeResult> {
-      return {
-        protocolVersion: CHIMERA_IDE_PROTOCOL_VERSION,
-        cliVersion: context.cliVersion,
-        account: { loggedIn: false },
-        models: [],
-        permissionMode: 'default',
-        capabilities: {
-          context: Boolean(params.capabilities.context),
-          diff: Boolean(params.capabilities.diff),
-          permissions: Boolean(params.capabilities.permissions),
-        },
-      }
-    },
   }
 }
 
